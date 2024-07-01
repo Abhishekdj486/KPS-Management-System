@@ -1,4 +1,3 @@
-// server.js
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -9,8 +8,11 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/data-management');
+// Connect to MongoDB Atlas using environment variable
+const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://abhishekjagtap486:<password>@kps-db.cjxuiue.mongodb.net/?retryWrites=true&w=majority&appName=kps-db';
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected successfully'))
+    .catch(err => console.error('MongoDB connection error:', err));
 
 // Define a schema
 const DataSchema = new mongoose.Schema({
