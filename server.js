@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Connect to MongoDB Atlas using environment variable
-const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://abhishekjagtap486:abhidj486@kps-db.cjxuiue.mongodb.net/?retryWrites=true&w=majority&appName=kps_management_system';
+const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://abhishekjagtap486:<password>@kps-db.cjxuiue.mongodb.net/?retryWrites=true&w=majority&appName=kps-db';
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected successfully'))
     .catch(err => console.error('MongoDB connection error:', err));
