@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Connect to MongoDB Atlas using environment variable
-const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://username:password@host/databasename?retryWrites=true&w=majority&appName=appname';
+const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://abhishekjagtap486:<password>@kps-db.cjxuiue.mongodb.net/?retryWrites=true&w=majority&appName=kps-db';
 mongoose.connect(mongoURI)
     .then(() => console.log('MongoDB connected successfully'))
     .catch(err => console.error('MongoDB connection error:', err));
