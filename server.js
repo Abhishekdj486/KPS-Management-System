@@ -9,8 +9,8 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Connect to MongoDB Atlas using environment variable
-const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://abhishekjagtap486:<password>@kps-db.cjxuiue.mongodb.net/?retryWrites=true&w=majority&appName=kps-db';
-mongoose.connect(mongoURI)
+const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://abhishekjagtap486:<abhidj486>@kps-db.cjxuiue.mongodb.net/?retryWrites=true&w=majority&appName=kps-db';
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected successfully'))
     .catch(err => console.error('MongoDB connection error:', err));
 
@@ -36,47 +36,27 @@ const Data = mongoose.model('Data', DataSchema);
 
 // Create route
 app.post('/data', async (req, res) => {
-    try {
-        const data = new Data(req.body);
-        await data.save();
-        res.send(data);
-    } catch (error) {
-        console.error('Error saving data:', error);
-        res.status(500).send({ message: 'Error saving data', error });
-    }
+    const data = new Data(req.body);
+    await data.save();
+    res.send(data);
 });
 
 // Read route
 app.get('/data', async (req, res) => {
-    try {
-        const data = await Data.find(req.query);
-        res.send(data);
-    } catch (error) {
-        console.error('Error retrieving data:', error);
-        res.status(500).send({ message: 'Error retrieving data', error });
-    }
+    const data = await Data.find(req.query);
+    res.send(data);
 });
 
 // Update route
 app.put('/data/:id', async (req, res) => {
-    try {
-        const data = await Data.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.send(data);
-    } catch (error) {
-        console.error('Error updating data:', error);
-        res.status(500).send({ message: 'Error updating data', error });
-    }
+    const data = await Data.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.send(data);
 });
 
 // Delete route
 app.delete('/data/:id', async (req, res) => {
-    try {
-        await Data.findByIdAndDelete(req.params.id);
-        res.send({ message: 'Data deleted' });
-    } catch (error) {
-        console.error('Error deleting data:', error);
-        res.status(500).send({ message: 'Error deleting data', error });
-    }
+    await Data.findByIdAndDelete(req.params.id);
+    res.send({ message: 'Data deleted' });
 });
 
 // Serve static files from the public directory
