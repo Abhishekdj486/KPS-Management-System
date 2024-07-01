@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <h1>Data List</h1>
+    
+    <div class="col-sm-3">
+        <input type="text" id="search" placeholder="Search..." class="form-control">
+        <button onclick="searchTable()" class="btn btn-primary">Search</button>
+    </div>
+        
+    <table id="dataTable" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Invoice No</th>
+                <th>Unit Serial No</th>
+                <th>Battery Serial No</th>
+                <th>Old Battery Serial No</th>
+                <th>Model</th>
+                <th>Capacity</th>
+                <th>Delivery Date</th>
+                <th>Consumer Name</th>
+                <th>Address</th>
+                <th>Contact No</th>
+                <th>Warranty</th>
+                <th>Total Amount</th>
+                <th>Amount Paid</th>
+                <th>Balance Amount</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchData();
+        });
+
+        async function fetchData() {
+            const response = await fetch('http://localhost:3000/data');
+            const data = await response.json();
+            const tbody = document.querySelector('#dataTable tbody');
+            tbody.innerHTML = '';
+            data.forEach(item => {
+                addRowToTable(item);
+            });
+        }
+
+        function updateTable(data) {
+            const tbody = document.querySelector('#dataTable tbody');
+            tbody.innerHTML = '';
+            if (data.length === 0) {
+                const row = document.createElement('tr');
+                const cell = document.createElement('td');
+                cell.setAttribute('colspan', '16');
+                cell.textContent = 'Data not found';
+                row.appendChild(cell);
+                tbody.appendChild(row);
+            } else {
+                data.forEach((item, index) => {
+                    addRowToTable(item, index + 1); // Pass index + 1 as serial number
+                });
+            }
+        }
+
+        function addRowToTable(item, serialNo) {
+            const tbody = document.querySelector('#dataTable tbody');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.invoiceNo}</td>
+                <td>${item.unitSerialNo}</td>
+                <td>${item.batterySerialNo}</td>
+                <td>${item.oldBatterySerialNo}</td>
+                <td>${item.model}</td>
+                <td>${item.capacity}</td>
+                <td>${item.deliveryDate}</td>
+                <td>${item.consumerName}</td>
+                <td>${item.address}</td>
+                <td>${item.contactNo}</td>
+                <td>${item.warranty}</td>
+                <td>${item.totalAmount}</td>
+                <td>${item.amountPaid}</td>
+                <td>${item.balanceAmount}</td>
+                <td>
+                    <button onclick="deleteData('${item._id}')">Delete</button>
+                    <button onclick="updateData('${item._id}')">Update</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        }
+
+        async function deleteData(id) {
+            await fetch(`http://localhost:3000/data/${id}`, {
+                method: 'DELETE'
+            });
+            fetchData();
+        }
+
+        async function updateData(id) {
+            const invoiceNo = prompt('Enter new invoice no:');
+            const unitSerialNo = prompt('Enter new unit serial no:');
+            const batterySerialNo = prompt('Enter new battery serial no:');
+            const oldBatterySerialNo = prompt('Enter new old battery serial no:');
+            const model = prompt('Enter new model:');
+            const capacity = prompt('Enter new capacity:');
+            const deliveryDate = prompt('Enter new delivery date:');
+            const consumerName = prompt('Enter new consumer name:');
+            const address = prompt('Enter new address:');
+            const contactNo = prompt('Enter new contact no:');
+            const warranty = prompt('Enter new warranty:');
+            const totalAmount = prompt('Enter new Total Amount:');
+            const amountPaid = prompt('Enter new amount paid:');
+            const balanceAmount = prompt('Enter new balance amount:');
+            await fetch(`http://localhost:3000/data/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    invoiceNo, unitSerialNo, batterySerialNo, oldBatterySerialNo,
+                    model, capacity, deliveryDate, consumerName,
+                    address, contactNo, warranty, totalAmount, amountPaid, balanceAmount
+                })
+            });
+            fetchData();
+        }
+
+        function searchTable() {
+            const filter = document.getElementById('search').value.toLowerCase();
+            const rows = document.querySelectorAll('#dataTable tbody tr');
+            rows.forEach(row => {
+                const cells = row.getElementsByTagName('td');
+                let match = false;
+                for (let i = 0; i < cells.length - 1; i++) {
+                    if (cells[i].innerText.toLowerCase().includes(filter)) {
+                        match = true;
+                        break;
+                    }
+                }
+                row.style.display = match ? '' : 'none';
+            });
+        }
+    </script>
+
+    <!-- Include jsPDF and jspdf-autotable from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.17/jspdf.plugin.autotable.min.js"></script>
+
+    <!--<button onclick="generatePDF()" class="btn btn-primary">Print</button>
+    <script>
+        {
+            function generatePDF() {
+    const { jsPDF } = window.jspdf;
+
+    // Initialize jsPDF document
+    const doc = new jsPDF();
+
+    doc.text('Data Table', 14, 15);
+
+    // Define columns for the table
+    const columns = [
+        { header: 'Inv. No', dataKey: 'invoiceNo' },
+        { header: 'Unit S.No', dataKey: 'unitSerialNo' },
+        { header: 'Bat S.No', dataKey: 'batterySerialNo' },
+        { header: 'O Bat S.No', dataKey: 'oldBatterySerialNo' },
+        { header: 'Model', dataKey: 'model' },
+        { header: 'Capacity', dataKey: 'capacity' },
+        { header: 'D Date', dataKey: 'deliveryDate' },
+        { header: 'C Name', dataKey: 'consumerName' },
+        { header: 'Address', dataKey: 'address' },
+        { header: 'Ph.No', dataKey: 'contactNo' },
+        { header: 'Warrnty', dataKey: 'warranty' },
+        { header: 'totalAmount', dataKey: 'totalAmount' },
+        { header: 'P Amt', dataKey: 'amountPaid' },
+        { header: 'Bal Amt', dataKey: 'balanceAmount' }
+    ];
+
+    // Get table data from the HTML table
+    const tableData = [];
+    const rows = document.querySelectorAll('#dataTable tbody tr');
+    rows.forEach(row => {
+        const rowData = {};
+        const cells = row.getElementsByTagName('td');
+        columns.forEach((column, index) => {
+            rowData[column.dataKey] = cells[index].innerText.trim();
+        });
+        tableData.push(rowData);
+    });
+
+    const styles = {
+        head: {
+            fillColor: '#f3f3f3',
+            textColor: '#333',
+            fontStyle: 'bold',
+            halign: 'center',
+            valign: 'middle'
+        },
+        body: {
+            textColor: '#333',
+            fontStyle: 'normal',
+            halign: 'left',
+            valign: 'middle'
+        },
+        alternateRowStyles: {
+            fillColor: '#f8f9fa'
+        },
+        columnStyles: {
+            invoiceNo: { fontStyle: 'bold' },
+            amountPaid: { halign: 'right' }
+        },
+        margin: { top: 30 }
+    };
+
+    doc.autoTable({
+        head: [columns.map(col => col.header)],
+        body: tableData.map(data => columns.map(col => data[col.dataKey])),
+        startY: 20, 
+        theme: 'grid',
+        styles: styles,
+        columnStyles: styles.columnStyles,
+        columnWidth: 'wrap',
+        
+    });
+
+
+    doc.save('data.pdf');
+}
+        }
+    </script>-->
+
+</body>
+</html>

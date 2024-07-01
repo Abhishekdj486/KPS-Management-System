@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search and Display</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .result {
+            border: 1px solid black;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .no-data {
+            text-align: center;
+            font-size: 18px;
+            color: red;
+        }
+        #printButton {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search and Print Data</h1>
+    <div class="col-sm-3">
+        <input type="text" id="search" class="form-control" placeholder="Search...">
+        <button class="btn btn-primary" onclick="searchData()">Search</button>
+    </div>
+    <div id="results"></div>
+    <button id="printButton" class="btn btn-primary" onclick="generatePDF()">Print</button>
+
+    <!-- Include jsPDF and jspdf-autotable from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.17/jspdf.plugin.autotable.min.js"></script>
+    
+    <script>
+        async function fetchData() {
+            const response = await fetch('http://localhost:3000/data');
+            return await response.json();
+        }
+
+        function searchData() {
+            const filter = document.getElementById('search').value.toLowerCase();
+            fetchData().then(data => {
+                const results = document.getElementById('results');
+                const printButton = document.getElementById('printButton');
+                results.innerHTML = '';
+                const filteredData = data.filter(item => {
+                    return Object.values(item).some(val => 
+                        String(val).toLowerCase().includes(filter)
+                    );
+                });
+
+                if (filteredData.length === 0) {
+                    results.innerHTML = '<p class="no-data">Data not found</p>';
+                    printButton.style.display = 'none';
+                } else {
+                    filteredData.forEach((item, index) => {
+                        const resultDiv = document.createElement('div');
+                        resultDiv.classList.add('result');
+                        resultDiv.innerHTML = `
+                            <p><strong>Invoice No:</strong> ${item.invoiceNo}</p>
+                            <p><strong>Unit Serial No:</strong> ${item.unitSerialNo}</p>
+                            <p><strong>Battery Serial No:</strong> ${item.batterySerialNo}</p>
+                            <p><strong>Old Battery Serial No:</strong> ${item.oldBatterySerialNo}</p>
+                            <p><strong>Model:</strong> ${item.model}</p>
+                            <p><strong>Capacity:</strong> ${item.capacity}</p>
+                            <p><strong>Delivery Date:</strong> ${item.deliveryDate}</p>
+                            <p><strong>Consumer Name:</strong> ${item.consumerName}</p>
+                            <p><strong>Address:</strong> ${item.address}</p>
+                            <p><strong>Contact No:</strong> ${item.contactNo}</p>
+                            <p><strong>Warranty:</strong> ${item.warranty}</p>
+                            <p><strong>Total Amount:</strong> ${item.totalAmount}</p>
+                            <p><strong>Amount Paid:</strong> ${item.amountPaid}</p>
+                            <p><strong>Balance Amount:</strong> ${item.balanceAmount}</p>
+                        `;
+                        results.appendChild(resultDiv);
+                    });
+                    printButton.style.display = 'block';
+                }
+            });
+        }
+
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Add the image to the PDF
+            const imgData = 'img/logo1.jpg'; // Path to your image file
+            const imgWidth = 180;
+            const imgHeight = 40;
+            const margin = 10;
+            const pageHeight = doc.internal.pageSize.height;
+            const lineHeight = 10;
+            const startY = imgHeight + 2 * margin; // Start y below the image
+
+            doc.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight); // x, y, width, height
+
+            const results = document.querySelectorAll('.result');
+            let y = startY; // Start y below the image
+
+            const keyMaxWidth = 60; // Adjust this value as needed to fit your longest key
+
+            if (results.length === 0) {
+                doc.text('Data not found', margin, y);
+            } else {
+                results.forEach((result, index) => {
+                    const lines = result.querySelectorAll('p');
+                    lines.forEach(line => {
+                        const text = line.innerText.trim();
+                        const [key, value] = text.split(': ');
+                        if (key && value) {
+                            if (y > pageHeight - margin) {
+                                doc.addPage();
+                                y = margin;
+                            }
+                            doc.setFont('Times New Roman', 'bold');
+                            doc.text(`${key}: `, margin, y);
+                            const textWidth = doc.getTextWidth(`${key}: `);
+                            doc.setFont('Times New Roman', 'normal');
+                            doc.text(`${value}`, margin + keyMaxWidth, y);
+                            y += lineHeight;
+                        }
+                    });
+                    y += lineHeight;
+                });
+            }
+
+            const signatureText = 'Daulatrao Kadam'; // Change this to your desired text
+            const signatureFontSize = 12;
+            const signatureMargin = 10;
+            const signatureWidth = doc.getStringUnitWidth(signatureText) * signatureFontSize / doc.internal.scaleFactor;
+            const signatureX = doc.internal.pageSize.width - signatureMargin - signatureWidth;
+            const signatureY = doc.internal.pageSize.height - signatureMargin;
+            
+            doc.setFontSize(signatureFontSize);
+            doc.setFont('Times New Roman', 'bold');
+            doc.text(signatureText, signatureX, signatureY, { align: 'right' });
+            
+            doc.save('results.pdf');
+        }
+    </script>
+</body>
+</html>
