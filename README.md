@@ -12,48 +12,48 @@ Update existing records.
 Delete records from the system.
 Responsive design using Bootstrap.
 # Project Structure
-index.html: Main page of the application. Contains a form for adding new records and a table for displaying existing records.
-admin.html: Admin page that includes a table to list data and functionality for searching, updating, and deleting records.
-admin.js: JavaScript file for handling data fetching, updating the table, and implementing search functionality.
+* index.html: Main page of the application. Contains a form for adding new records and a table for displaying existing records.
+* admin.html: Admin page that includes a table to list data and functionality for searching, updating, and deleting records.
+* admin.js: JavaScript file for handling data fetching, updating the table, and implementing search functionality.
 # Dependencies
-Bootstrap 5.0.2: Used for responsive design and styling.
-jsPDF: Library to generate PDF documents.
-jsPDF AutoTable: Plugin for jsPDF to create tables in PDF documents.
-Installation
-Clone the repository:
+* Bootstrap 5.0.2: Used for responsive design and styling.
+* jsPDF: Library to generate PDF documents.
+* jsPDF AutoTable: Plugin for jsPDF to create tables in PDF documents.
+# Installation
+* Clone the repository:
 bash
-Copy code
+* Copy code
 git clone https://github.com/yourusername/kps-management-system.git
-Navigate to the project directory:
+* Navigate to the project directory:
 bash
 Copy code
 cd kps-management-system
-Open index.html in your web browser to view the main page.
-Open admin.html in your web browser to access the admin functionalities.
-Usage
-Adding New Records:
+* Open index.html in your web browser to view the main page.
+* Open admin.html in your web browser to access the admin functionalities.
+# Usage
+* Adding New Records:
 
-Open index.html in a web browser.
+* Open index.html in a web browser.
 Fill out the form with the necessary details.
 Submit the form to add the record to the system.
 Viewing Records:
 
-Open admin.html in a web browser.
+* Open admin.html in a web browser.
 The table will automatically populate with existing records fetched from the server.
 Searching Records:
 
-Use the search input field at the top of the table on the admin page.
-Enter a keyword to filter records based on matching data.
-Updating Records:
+* Use the search input field at the top of the table on the admin page.
+* Enter a keyword to filter records based on matching data.
+* Updating Records:
 
-Click the "Update" button next to a record in the table.
-Enter new details in the prompted fields.
-Submit to update the record in the system.
-Deleting Records:
+* Click the "Update" button next to a record in the table.
+* Enter new details in the prompted fields.
+* Submit to update the record in the system.
+# Deleting Records:
 
-Click the "Delete" button next to a record in the table.
-Confirm the deletion to remove the record from the system.
-Code Snippets
+* Click the "Delete" button next to a record in the table.
+* Confirm the deletion to remove the record from the system.
+# Code Snippets
 Fetch Data (admin.js)
 javascript
 Copy code
@@ -90,10 +90,10 @@ function addRowToTable(item, serialNo) {
     `;
     tbody.appendChild(row);
 }
-Contributing
+# Contributing
 Contributions are welcome! Please fork this repository and submit pull requests for any improvements or bug fixes.
 
-License
+# License
 This project is licensed under the MIT License.
 
-This README file provides a comprehensive overview of the KPS Management System, including installation, usage instructions, and code snippets for key functionalities.
+# This README file provides a comprehensive overview of the KPS Management System, including installation, usage instructions, and code snippets for key functionalities.
