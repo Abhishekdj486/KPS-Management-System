@@ -8,9 +8,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-// Get the MongoDB URI from the environment variables
-const mongoURI = process.env.MONGO_URI;
-
 // Connect to MongoDB Atlas using environment variable
 const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://abhishekjagtap486:abhidj486@kps-db.cjxuiue.mongodb.net/data_management?retryWrites=true&w=majority&appName=kps-db';
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
