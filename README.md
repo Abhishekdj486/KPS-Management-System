@@ -1,5 +1,4 @@
 # KPS-Management-System
-https://kps-management-system.onrender.com/
 # Kadam Power System Management System
 Overview
 Kadam Power System (KPS) Management System is a web-based application designed to manage and display data related to power system components. This application allows users to search, update, and delete records in a user-friendly interface. The project consists of a frontend built with HTML, CSS, and JavaScript.
