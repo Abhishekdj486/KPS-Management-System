@@ -107,6 +107,8 @@
 
             const keyMaxWidth = 60; // Adjust this value as needed to fit your longest key
 
+            let customerName = "Customer"; // Default name if not found
+
             if (results.length === 0) {
                 doc.text('Data not found', margin, y);
             } else {
@@ -116,6 +118,9 @@
                         const text = line.innerText.trim();
                         const [key, value] = text.split(': ');
                         if (key && value) {
+                            if (key === "Consumer Name") {
+                                customerName = value;
+                            }
                             if (y > pageHeight - margin) {
                                 doc.addPage();
                                 y = margin;
@@ -143,7 +148,7 @@
             doc.setFont('Times New Roman', 'bold');
             doc.text(signatureText, signatureX, signatureY, { align: 'right' });
             
-            doc.save('{${item.consumerName}.pdf');
+            doc.save(`${customerName}.pdf`);
         }
     </script>
 </body>
