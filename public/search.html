@@ -108,6 +108,7 @@
             const keyMaxWidth = 60; // Adjust this value as needed to fit your longest key
 
             let customerName = "Customer"; // Default name if not found
+            let invoiceNo = ""; // Default invoice number if not found
 
             if (results.length === 0) {
                 doc.text('Data not found', margin, y);
@@ -120,6 +121,9 @@
                         if (key && value) {
                             if (key === "Consumer Name") {
                                 customerName = value;
+                            }
+                            if (key === "Invoice No") {
+                                invoiceNo = value;
                             }
                             if (y > pageHeight - margin) {
                                 doc.addPage();
@@ -148,7 +152,8 @@
             doc.setFont('Times New Roman', 'bold');
             doc.text(signatureText, signatureX, signatureY, { align: 'right' });
             
-            doc.save(`${customerName}.pdf`);
+            const fileName = `${customerName}(${invoiceNo}).pdf`;
+            doc.save(fileName);
         }
     </script>
 </body>
