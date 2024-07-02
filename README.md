@@ -23,7 +23,7 @@ Responsive design using Bootstrap.
 * Clone the repository:
 bash
 * Copy code
-git clone https://github.com/abhishekjagtap486/kps-management-system.git
+git clone https://github.com/Abhishekdj486/kps-management-system.git
 * Navigate to the project directory:
 bash
 Copy code
