@@ -23,7 +23,7 @@ Responsive design using Bootstrap.
 * Clone the repository:
 bash
 * Copy code
-git clone https://github.com/yourusername/kps-management-system.git
+git clone https://github.com/abhishekjagtap486/kps-management-system.git
 * Navigate to the project directory:
 bash
 Copy code
@@ -58,7 +58,7 @@ Fetch Data (admin.js)
 javascript
 Copy code
 async function fetchData() {
-    const response = await fetch('http://localhost:3000/data');
+    const response = await fetch('https://kps-management-system.onrender.com/data');
     const data = await response.json();
     updateTable(data);
 }
