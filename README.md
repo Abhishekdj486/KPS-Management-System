@@ -1,21 +1,21 @@
 # KPS-Management-System
 https://kps-management-system.onrender.com/
-Kadam Power System Management System
+# Kadam Power System Management System
 Overview
 Kadam Power System (KPS) Management System is a web-based application designed to manage and display data related to power system components. This application allows users to search, update, and delete records in a user-friendly interface. The project consists of a frontend built with HTML, CSS, and JavaScript.
 
-Features
+# Features
 Display a list of power system records.
 Search functionality to filter records based on user input.
 Add new records to the system.
 Update existing records.
 Delete records from the system.
 Responsive design using Bootstrap.
-Project Structure
+# Project Structure
 index.html: Main page of the application. Contains a form for adding new records and a table for displaying existing records.
 admin.html: Admin page that includes a table to list data and functionality for searching, updating, and deleting records.
 admin.js: JavaScript file for handling data fetching, updating the table, and implementing search functionality.
-Dependencies
+# Dependencies
 Bootstrap 5.0.2: Used for responsive design and styling.
 jsPDF: Library to generate PDF documents.
 jsPDF AutoTable: Plugin for jsPDF to create tables in PDF documents.
